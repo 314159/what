@@ -1,10 +1,10 @@
 Summary: Prints sccs tokens found in files.
 Name: what
-Version: 1.0.0
+Version: 1.0.1
 Release: 1
 Copyright: GPL
 Group: Applications/File
-Source: what-1.0.0.tar.gz
+Source: what-1.0.1.tar.gz
 
 %description
 This program finds and prints sccs tokens found in files.
