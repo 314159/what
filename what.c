@@ -8,9 +8,10 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 static char *_filename;
-static char revision[]="@(#)$Header: /cvsroot/what/src/what.c,v 1.1 2002/02/19 00:21:02 sbnelson Exp $";
+static char revision[]="@(#)$Header: /cvsroot/what/src/what.c,v 1.2 2003/10/05 21:31:02 sbnelson Exp $";
 
 /* "wrapper" for standard fputs */
 int
@@ -101,7 +102,7 @@ process_file(FILE *stream)
 	}
 }
 
-void
+int
 main(int argc, char **argv)
 {
 	int i;
