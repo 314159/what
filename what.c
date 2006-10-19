@@ -9,9 +9,10 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
 static char *_filename;
-static char revision[]="@(#)$Header: /cvsroot/what/src/what.c,v 1.2 2003/10/05 21:31:02 sbnelson Exp $";
+static char revision[]="@(#)$Header: /cvsroot/what/src/what.c,v 1.3 2006/10/19 20:56:52 sbnelson Exp $";
 
 /* "wrapper" for standard fputs */
 int
@@ -68,7 +69,7 @@ Fgetc(FILE *stream)
  * file stream, and writes its output to stdout.
  */
 void
-process_file(FILE *stream)
+process_file(FILE *stream, int stop_on_first)
 {
 	int c;
 	enum state {got_nothing,got_at,got_open,got_hash,got_all};
@@ -97,6 +98,8 @@ process_file(FILE *stream)
 				Putchar(c);
 			}
 			Putchar('\n');
+			if (stop_on_first)
+				break;
 		} else
 			st = got_nothing;
 	}
@@ -107,23 +110,36 @@ main(int argc, char **argv)
 {
 	int i;
 	FILE *fd;
+	int stop_on_first = 0;
 
 	if (argc < 1)
 		exit(1);
 	else if (argc == 1) {
 		_filename = "(stdin)";
-		process_file(stdin);
-	} else for (i=1; i < argc; i++) {
-		_filename = argv[i];
-		fd = fopen(argv[i], "r");
-		if (fd == NULL)
-			perror(argv[i]);
-		else {
-			Fputs(_filename, stdout);
-			Putchar(':');
-			Putchar('\n');
-			process_file(fd);
-			Fclose(fd);
+		process_file(stdin, stop_on_first);
+	} else {
+		for (i=1; i < argc; i++) {
+			if(strncmp(argv[i], "-s", 2) == 0) {
+				stop_on_first = 1;
+			}
+		}
+
+		for (i=1; i < argc; i++) {
+			if(strncmp(argv[i], "-s", 2) == 0) {
+				continue;
+			}
+
+			_filename = argv[i];
+			fd = fopen(argv[i], "r");
+			if (fd == NULL)
+				perror(argv[i]);
+			else {
+				Fputs(_filename, stdout);
+				Putchar(':');
+				Putchar('\n');
+				process_file(fd, stop_on_first);
+				Fclose(fd);
+			}
 		}
 	}
 	exit(0);
