@@ -1,0 +1,31 @@
+.TH What "1" "March 2010" "What 1.0.1" "User Commands"
+.SH NAME
+what \- Prints sccs tokens found in files
+.SH SYNOPSIS
+.B what
+[\fB\-s\fR] [\fIfilename\fR]...
+.br
+.SH DESCRIPTION
+The "\fBwhat\fR" program will search through the files to find sccs
+identification strings\&. The identification string begins with @(#)
+and continues until a non-printable character is found, or one of
+the following characters are found: ", >, \\, or new-line.
+.br
+If no filename is specified, the program will read from standard input.
+.PP
+.TP
+\fB\-s\fR
+Stop searching after the first token was found
+.SH AUTHOR
+Written by Scott Nelson <sbnelson@thermeon.com>
+.SH "REPORTING BUGS"
+Report what bugs to sbnelson@thermeon.com
+.br
+Home page: <http://what.sourceforge.net/>
+.SH COPYRIGHT
+Copyright \(co Scott Nelson
+.br
+License GPLv2: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>.
+.br
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.

@@ -12,7 +12,7 @@
 #include <string.h>
 
 static char *_filename;
-static char revision[]="@(#)$Header: /cvsroot/what/src/what.c,v 1.3 2006/10/19 20:56:52 sbnelson Exp $";
+static char revision[]="@(#)$Header: /cvsroot/what/src/what.c,v 1.4 2011/03/10 01:02:57 sbnelson Exp $";
 
 /* "wrapper" for standard fputs */
 int
@@ -68,9 +68,11 @@ Fgetc(FILE *stream)
 /* This is the main logic.  It processes the supplied
  * file stream, and writes its output to stdout.
  */
-void
+int
 process_file(FILE *stream, int stop_on_first)
 {
+	int found = 0;
+
 	int c;
 	enum state {got_nothing,got_at,got_open,got_hash,got_all};
 	enum state st;
@@ -87,6 +89,7 @@ process_file(FILE *stream, int stop_on_first)
 			/* got it all! Output tab and it ident string
 			 * followed by a new line.
 			 */
+			found = 1;
 			Putchar('\t');
 			while ( ((c = Fgetc(stream)) != EOF)
 				&& isprint(c)
@@ -103,6 +106,8 @@ process_file(FILE *stream, int stop_on_first)
 		} else
 			st = got_nothing;
 	}
+
+	return found;
 }
 
 int
@@ -111,12 +116,13 @@ main(int argc, char **argv)
 	int i;
 	FILE *fd;
 	int stop_on_first = 0;
+	int found = 0;
 
 	if (argc < 1)
 		exit(1);
 	else if (argc == 1) {
 		_filename = "(stdin)";
-		process_file(stdin, stop_on_first);
+		found = process_file(stdin, stop_on_first);
 	} else {
 		for (i=1; i < argc; i++) {
 			if(strncmp(argv[i], "-s", 2) == 0) {
@@ -137,10 +143,10 @@ main(int argc, char **argv)
 				Fputs(_filename, stdout);
 				Putchar(':');
 				Putchar('\n');
-				process_file(fd, stop_on_first);
+				found = found || process_file(fd, stop_on_first);
 				Fclose(fd);
 			}
 		}
 	}
-	exit(0);
+	exit(found ? 0 : 1);
 }
