@@ -1,2 +1,6 @@
 This program is an open-source version of the "what" program.  It
 displays sccs tags located in files (binary or text).
+
+Although there have not been updates to this program in years, the
+program is mature and stable and is used in production by myself
+and others.
