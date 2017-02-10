@@ -116,6 +116,7 @@ process_file(FILE *stream, int stop_on_first)
 				Putchar(c);
 			}
 			Putchar('\n');
+			st = got_nothing;
 			if (stop_on_first)
 				break;
 		} else

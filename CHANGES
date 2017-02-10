@@ -1,1 +1,7 @@
 Roel Lascano sent in a patch to incorporate the -s option -- to stop after first match in a file.
+
+2017-02-10 Ian Abbott wrote:
+  I spotted a slight bug.  After outputting a “what" string, it remains
+  in the 'got_hash' state, so if the next character after the terminator
+  happened to be another ')', it would output whatever followed it.
+
