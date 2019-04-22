@@ -99,7 +99,7 @@ main(int argc, char** argv)
   --argc;
   ++argv;
 
-  bool stop_on_first{false};
+  auto stop_on_first = false;
 
   while (argc and argv[0][0] == '-') {
     if (string{argv[0]} == "-s") {
@@ -115,7 +115,7 @@ main(int argc, char** argv)
     ++argv;
   }
 
-  bool found = false;
+  auto found = false;
 
   if (argc) {
     while (argc) {
