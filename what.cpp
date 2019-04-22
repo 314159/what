@@ -47,7 +47,12 @@ process_file(bool stop_on_first, const string& filename)
 bool
 process_file(bool stop_on_first, istream& strm, const string& filename)
 {
-  enum class state {got_nothing,got_at,got_open,got_hash,got_all};
+  enum class state {
+    got_nothing,
+    got_at,
+    got_open,
+    got_hash,
+    got_all};
   auto st = state::got_nothing;
   auto found = false;
 
