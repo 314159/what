@@ -53,34 +53,28 @@ process_file(bool stop_on_first, istream& strm, const string& filename)
 
   while (strm) {
     auto c = strm.get();
-    if (c == '@') {
+    if ((st == state::got_nothing) && (c == '@')) {
       st = state::got_at;
     } else if ((st == state::got_at) && (c == '(')) {
       st = state::got_open;
     } else if ((st == state::got_open) && (c == '#')) {
       st = state::got_hash;
     } else if ((st == state::got_hash) && (c == ')')) {
-      /* got it all! Output tab and it ident string
-       * followed by a new line.
-       */
+      st = state::got_all;
       found = true;
       cout << '\t';
-      while (strm) {
-        c = strm.get();
-        if (isprint(c)
-          && (c != '"')
-          && (c != '>')
-          && (c != '\n')
-          && (c != '\\')
-          && (c != '\0')) {
-          cout << static_cast<unsigned char>(c);
-        } else {
-          break;
-        }
-      }
+    } else if ((st == state::got_all) && (
+			    (not isprint(c))
+			    || (c == '"')
+			    || (c == '>')
+			    || (c == '\n')
+			    || (c == '\\')
+			    || (c == '\0'))) {
       cout << '\n';
       st = state::got_nothing;
       if (stop_on_first) break;
+    } else if (st == state::got_all) {
+      cout << static_cast<unsigned char>(c);
     } else {
       st = state::got_nothing;
     }
